@@ -56,7 +56,7 @@ class Inkep(Akunn):
         print("Data pegawai berhasil diunggah")
         User.kurangi(User)
 
-    def dataPegawai(Inkep):
+    def dataPegawai():
         con = sqlite3.connect("database.db")
         cursor = con.cursor()
         query = 'SELECT * FROM [Data Pegawai "Inkep"]'
@@ -121,15 +121,15 @@ class Akun:
         5. keluar""")
         a=input('mohon input fitur sesuai angka :')
         if a=='1':
-            print('Silahkan isi data data pasien dibawah ini')
-            Nama = input('nama pasien :')
+            print('Silahkan isi data data pegawai dibawah ini')
+            Nama = input('nama Pegawai :')
             Jenis_Kelamin = input('jenis kelamin :')
             Usia = input('usia :')
             Alamat = input('alamat :')
             Tempat_Tanggal_Lahir = input('tempat, tanggal lahir :')
             Agama = input('agama :')
             No_telepon = input('no.telepon :')
-            Inkep.Administrasi(Nama, Jenis_Kelamin, Usia, Alamat, Status_Kewarganegaraan, Tempat_tanggal_lahir, Agama, No_telepon)
+            Inkep.Administrasi(Nama, Jenis_Kelamin, Usia, Alamat, Tempat_Tanggal_Lahir, Agama, No_telepon)
         elif a=="2":
             Inkep.dataPegawai()
         elif a=='3':
@@ -311,20 +311,5 @@ class Manajer():
             con.commit()
             Manajer.notif(Nama_Manajer)
             con.close()
-
-    def notif(Nama_Manajer):
-        con = sqlite3.connect("database.db")
-        cursor = con.cursor()
-        query = 'SELECT [Jumlah Data Manajer] FROM [Data Manajer] where [Nama Manajer]=\'%s\' '
-        query = query % (Nama_Manajer)
-        cursor.execute(query)
-        con.commit()
-        row = cursor.fetchall()
-        if row[0][0] <= 5:
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            print('!!!!! stock obat menipis, harap melakukan stock ulang !!!!!')
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        con.close()
-        Akun.program_pegawai()
 
 Akun.masuk_akun()
