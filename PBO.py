@@ -1,6 +1,20 @@
 import sqlite3
+import abc
+class Akunn(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def BuatAkun():
+        pass
+    @abc.abstractmethod
+    def Login():
+        pass
+    @abc.abstractmethod
+    def Administrasi():
+        pass
+    @abc.abstractmethod
+    def dataPegawai():
+        pass
 
-class Inkep:
+class Inkep(Akunn):
     
     def BuatAkun(Username, Password, Nama_Pegawai):
         con = sqlite3.connect("database.db")
@@ -30,19 +44,19 @@ class Inkep:
             Akun.program(Username)      
         con.close()
 
-    def Administrasi(Nama, Jenis_Kelamin, Usia, Alamat, Status_Kewarganegaraan, Tempat_tanggal_lahir, Agama, No_telepon):
+    def Administrasi(Nama, Jenis_Kelamin, Usia, Alamat, Tempat_Tanggal_Lahir, Agama, No_telepon):
         con = sqlite3.connect("database.db")
         cursor = con.cursor()
-        query = 'INSERT INTO [Data Pegawai "Inkep"] (Nama, [Jenis Kelamin], Usia, Alamat, [Status Kewarganegaraan], [Tempat tanggal lahir], Agama, [No telepon]) \
+        query = 'INSERT INTO [Data Pegawai "Inkep"] (Nama, [Jenis Kelamin], Usia, Alamat, [Tempat Tanggal Lahir], Agama, [No telepon]) \
             VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\')' 
-        query = query % (Nama, Jenis_Kelamin, Usia, Alamat, Status_Kewarganegaraan, Tempat_tanggal_lahir, Agama, No_telepon)
+        query = query % (Nama, Jenis_Kelamin, Usia, Alamat, Tempat_Tanggal_Lahir, Agama, No_telepon)
         cursor.execute(query)
         con.commit()
         con.close()
         print("Data pegawai berhasil diunggah")
-        obat.kurangi(Jenis_Obat)
+        User.kurangi(User)
 
-    def dataPegawai():
+    def dataPegawai(Inkep):
         con = sqlite3.connect("database.db")
         cursor = con.cursor()
         query = 'SELECT * FROM [Data Pegawai "Inkep"]'
@@ -56,10 +70,9 @@ class Inkep:
             print('Jenis kelamin pegawai :',i[2])
             print('Usia pegawai :',i[3])
             print('Alamat pegawai :',i[4])
-            print('Status Kewarganegaraan pegawai :',i[5])
-            print('Tempat, tanggal lahir pegawai :',i[6])
-            print('Agama pasien :',i[7])
-            print('No.Telepon pasien :',i[8])
+            print('Tempat, tanggal lahir pegawai :',i[5])
+            print('Agama pegawai :',i[6])
+            print('No.Telepon pegawai :',i[7])
         con.close()
         Akun.program_pegawai()
 
@@ -113,8 +126,7 @@ class Akun:
             Jenis_Kelamin = input('jenis kelamin :')
             Usia = input('usia :')
             Alamat = input('alamat :')
-            Status_Kewarganegaraan = input('status kewarganegaraan :')
-            Tempat_tanggal_lahir = input('tempat, tanggal lahir :')
+            Tempat_Tanggal_Lahir = input('tempat, tanggal lahir :')
             Agama = input('agama :')
             No_telepon = input('no.telepon :')
             Inkep.Administrasi(Nama, Jenis_Kelamin, Usia, Alamat, Status_Kewarganegaraan, Tempat_tanggal_lahir, Agama, No_telepon)
@@ -154,6 +166,78 @@ class Akun:
             print('terimakasih telah memakai program ini :)')
         else:print('inputan anda salah, mohon mulai ulang program')
 
+class User():
+
+    def lihat():
+        con = sqlite3.connect("database.db")
+        cursor = con.cursor()
+        query = 'SELECT * FROM [Data Manajer]'
+        cursor.execute(query)
+        hasil = cursor.fetchall()
+        con.commit()
+        for i in hasil:
+            print('-------------------------------------------')
+            print('No.Id  :',i[0])
+            print('Nama  :',i[1])
+            print('Usia  :',i[2])
+            print('Jenis Kelamin :',i[3])
+            print('Alamat :',i[4])
+            print('Tempat Tanggal Lahir :',i[5])
+            print('Agama :',i[6])
+            print('Nomor telepon :',i[7])
+            print('Jadwal :',i[8])
+        Akun.user()
+
+    def tambah(Nama_User, Jumlah_dataUser):
+        con = sqlite3.connect("database.db")
+        cursor = con.cursor()
+        query = 'INSERT INTO [Data User] ([Nama User], [Jumlah Data User]) VALUES (\'%s\', \'%s\')' 
+        query = query % (Nama_User, Jumlah_dataUser)
+        cursor.execute(query)
+        con.commit()
+        con.close()
+        print("Data user telah berhasil ditambah")
+        Akun.user()
+    
+    def edit(Nama_User):
+        con = sqlite3.connect("database.db")
+        cursor = con.cursor()
+        query = 'SELECT [Jumlah Data User] FROM [Data User] where [Nama User]=\'%s\' '
+        query = query % (Nama_User)
+        cursor.execute(query)
+        con.commit()
+        row = cursor.fetchall()
+        data = input('input jumlah data user yang baru :')
+        baru = data[0][0]
+        baru = data
+        query = 'UPDATE [Data User] SET [Jumlah Data User] = \'%s\' Where [Nama User] = \'%s\' ' 
+        query = query % (baru, Nama_User)
+        cursor.execute(query)
+        con.commit()
+        con.close()
+        print("Data user telah berhasil ditambah")
+        Akun.user()
+
+    def kurangi(Nama_User):
+        con = sqlite3.connect("database.db")
+        cursor = con.cursor()
+        query = 'SELECT [Nama User],[Jumlah Data User] FROM [Data User] where [Nama User]=\'%s\' '
+        query = query % (Nama_User)
+        cursor.execute(query)
+        con.commit()
+        row = cursor.fetchall()
+        if (len(row)) == 0:
+            print("Maaf user yang anda inputkan tidak ada dalam data")
+            Akun.program_pegawai()
+        elif Nama_User == row[0][0]:
+            baru = row[0][1] - 1
+            query = 'UPDATE [Data User] SET [Jumlah Data User] = \'%s\' Where [Nama User] = \'%s\' ' 
+            query = query % (baru, Nama_User)
+            cursor.execute(query)
+            con.commit()
+            User.notif(Nama_User)
+            con.close()
+
 class Manajer():
 
     def lihat():
@@ -175,6 +259,7 @@ class Manajer():
             print('Jumlah Pegawai :',i[7])
             print('Nomor telepon :',i[8])
             print('Jadwal :',i[9])
+            print('Menambah Pegawai Baru :',i[10])
         Akun.manajer()
 
     def tambah(Nama_Manajer, Jumlah_dataManajer):
@@ -241,3 +326,5 @@ class Manajer():
             print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         con.close()
         Akun.program_pegawai()
+
+Akun.masuk_akun()
