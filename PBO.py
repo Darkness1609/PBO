@@ -48,13 +48,13 @@ class Inkep(Akunn):
         con = sqlite3.connect("database.db")
         cursor = con.cursor()
         query = 'INSERT INTO [Data Pegawai "Inkep"] (Nama, [Jenis Kelamin], Usia, Alamat, [Tempat Tanggal Lahir], Agama, [No telepon]) \
-            VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\')' 
+            VALUES (\'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\', \'%s\')' 
         query = query % (Nama, Jenis_Kelamin, Usia, Alamat, Tempat_Tanggal_Lahir, Agama, No_telepon)
         cursor.execute(query)
         con.commit()
         con.close()
         print("Data pegawai berhasil diunggah")
-        User.kurangi(User)
+        Akun.program_pegawai()
 
     def dataPegawai():
         con = sqlite3.connect("database.db")
@@ -166,77 +166,6 @@ class Akun:
             print('terimakasih telah memakai program ini :)')
         else:print('inputan anda salah, mohon mulai ulang program')
 
-class User():
-
-    def lihat():
-        con = sqlite3.connect("database.db")
-        cursor = con.cursor()
-        query = 'SELECT * FROM [Data Manajer]'
-        cursor.execute(query)
-        hasil = cursor.fetchall()
-        con.commit()
-        for i in hasil:
-            print('-------------------------------------------')
-            print('No.Id  :',i[0])
-            print('Nama  :',i[1])
-            print('Usia  :',i[2])
-            print('Jenis Kelamin :',i[3])
-            print('Alamat :',i[4])
-            print('Tempat Tanggal Lahir :',i[5])
-            print('Agama :',i[6])
-            print('Nomor telepon :',i[7])
-            print('Jadwal :',i[8])
-        Akun.user()
-
-    def tambah(Nama_User, Jumlah_dataUser):
-        con = sqlite3.connect("database.db")
-        cursor = con.cursor()
-        query = 'INSERT INTO [Data User] ([Nama User], [Jumlah Data User]) VALUES (\'%s\', \'%s\')' 
-        query = query % (Nama_User, Jumlah_dataUser)
-        cursor.execute(query)
-        con.commit()
-        con.close()
-        print("Data user telah berhasil ditambah")
-        Akun.user()
-    
-    def edit(Nama_User):
-        con = sqlite3.connect("database.db")
-        cursor = con.cursor()
-        query = 'SELECT [Jumlah Data User] FROM [Data User] where [Nama User]=\'%s\' '
-        query = query % (Nama_User)
-        cursor.execute(query)
-        con.commit()
-        row = cursor.fetchall()
-        data = input('input jumlah data user yang baru :')
-        baru = data[0][0]
-        baru = data
-        query = 'UPDATE [Data User] SET [Jumlah Data User] = \'%s\' Where [Nama User] = \'%s\' ' 
-        query = query % (baru, Nama_User)
-        cursor.execute(query)
-        con.commit()
-        con.close()
-        print("Data user telah berhasil ditambah")
-        Akun.user()
-
-    def kurangi(Nama_User):
-        con = sqlite3.connect("database.db")
-        cursor = con.cursor()
-        query = 'SELECT [Nama User],[Jumlah Data User] FROM [Data User] where [Nama User]=\'%s\' '
-        query = query % (Nama_User)
-        cursor.execute(query)
-        con.commit()
-        row = cursor.fetchall()
-        if (len(row)) == 0:
-            print("Maaf user yang anda inputkan tidak ada dalam data")
-            Akun.program_pegawai()
-        elif Nama_User == row[0][0]:
-            baru = row[0][1] - 1
-            query = 'UPDATE [Data User] SET [Jumlah Data User] = \'%s\' Where [Nama User] = \'%s\' ' 
-            query = query % (baru, Nama_User)
-            cursor.execute(query)
-            con.commit()
-            User.notif(Nama_User)
-            con.close()
 
 class Manajer():
 
